@@ -61,3 +61,9 @@ docker run -p 8000:8000 \
 - Mettre l'app derrière un reverse-proxy HTTPS (Nginx/Caddy/Traefik).
 - Activer monitoring + sauvegarde quotidienne de la base SQLite.
 - Restreindre les IP d’administration si possible.
+
+## Dépannage aperçu 404
+Si l’aperçu ouvre une URL différente de `/`, le serveur renvoie désormais l’interface (fallback SPA) pour éviter les écrans `404 Not Found`.
+
+## Publication GitHub
+Voir `GITHUB_PUSH.md` pour les commandes exactes de publication.

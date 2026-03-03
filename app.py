@@ -287,10 +287,17 @@ class AppHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path in {"/", "/index.html"}:
             return self._serve_file(TEMPLATE_FILE, "text/html; charset=utf-8")
-        if parsed.path == "/static/styles.css":
-            return self._serve_file(STATIC_DIR / "styles.css", "text/css; charset=utf-8")
-        if parsed.path == "/static/app.js":
-            return self._serve_file(STATIC_DIR / "app.js", "application/javascript; charset=utf-8")
+        static_map = {
+            "/static/styles.css": (STATIC_DIR / "styles.css", "text/css; charset=utf-8"),
+            "/static/app.js": (STATIC_DIR / "app.js", "application/javascript; charset=utf-8"),
+        }
+        if parsed.path in static_map:
+            file_path, content_type = static_map[parsed.path]
+            return self._serve_file(file_path, content_type)
+        if parsed.path == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
+            return
         if parsed.path == "/health":
             cleanup_sessions()
             return self._send_json(200, {"status": "ok"})
@@ -323,7 +330,11 @@ class AppHandler(BaseHTTPRequestHandler):
             conn.close()
             return self._send_json(200, [dict(row) for row in rows])
 
-        self.send_error(404)
+        if parsed.path.startswith("/api/"):
+            return self._send_json(404, {"error": "Route API introuvable"})
+
+        # SPA fallback to avoid preview 404 for non-root paths.
+        return self._serve_file(TEMPLATE_FILE, "text/html; charset=utf-8")
 
     def do_POST(self):
         parsed = urlparse(self.path)
