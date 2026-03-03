@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogiTicket Pro</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape"></div>
+    <main class="app">
+      <header class="topbar card">
+        <div>
+          <p class="eyebrow">Plateforme ticketing logistique eCommerce</p>
+          <h1>LogiTicket Pro</h1>
+          <p class="subtitle">Pilotage incidents transport, préparation et expérience client en temps réel.</p>
+        </div>
+        <div id="sessionInfo" class="session hidden"></div>
+      </header>
+
+      <section id="authPanel" class="card auth-card">
+        <h2>Connexion sécurisée</h2>
+        <p class="subtitle">Un accès dédié par client + un cockpit global admin.</p>
+        <form id="loginForm" class="grid-form">
+          <label>Nom d'utilisateur <input id="username" autocomplete="username" required /></label>
+          <label>Mot de passe <input id="password" type="password" autocomplete="current-password" required /></label>
+          <button type="submit" class="primary">Se connecter</button>
+        </form>
+        <p id="authError" class="error"></p>
+      </section>
+
+      <section id="dashboard" class="hidden">
+        <div class="quick-stats" id="quickStats"></div>
+
+        <div class="layout">
+          <article class="card">
+            <div class="section-title-row section-gap">
+              <h2>Tickets</h2>
+              <div class="toolbar">
+                <input id="searchInput" placeholder="Recherche: ticket, commande, client..." />
+                <select id="statusFilter">
+                  <option value="all">Tous statuts</option>
+                  <option value="Nouveau">Nouveau</option>
+                  <option value="En-cours">En-cours</option>
+                  <option value="Résolu">Résolu</option>
+                </select>
+                <button id="refreshBtn">Actualiser</button>
+                <button id="newTicketBtn" class="primary hidden">Nouveau ticket</button>
+                <button id="logoutBtn">Déconnexion</button>
+              </div>
+            </div>
+            <div id="ticketList"></div>
+          </article>
+
+          <article class="card">
+            <h2>Notifications</h2>
+            <ul id="notifications" class="list"></ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="ticketModal">
+      <form id="ticketForm" class="grid-form">
+        <h3>Créer un ticket</h3>
+        <label>Type
+          <select id="ticketType" required>
+            <option>Retard transport</option>
+            <option>Erreur préparation</option>
+            <option>Colis perdu</option>
+            <option>Adresse invalide</option>
+            <option>Rupture interface transporteur</option>
+          </select>
+        </label>
+        <label>Priorité
+          <select id="ticketPriority" required>
+            <option>Normale</option>
+            <option>Haute</option>
+            <option>Critique</option>
+          </select>
+        </label>
+        <label>Commande <input id="ticketOrder" placeholder="CMD-2026-00125" required /></label>
+        <label>Détails <textarea id="ticketDescription" rows="4" required></textarea></label>
+        <div class="modal-actions">
+          <button type="button" id="cancelTicket">Annuler</button>
+          <button type="submit" class="primary">Créer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <p id="toast" class="toast hidden" role="status" aria-live="polite"></p>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
